@@ -1,9 +1,72 @@
-import example.pepita
+import tomyJerry.*
 
-describe "group of tests for pepita" {
+describe "casa de Tom y Jerry" {
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+  test "Tom limpia y pierde energia durante el dia" {
+    casa.reiniciar()
+    casa.agregarSuciedad(200)
+    tom.setEnergia(100)
+
+    casa.dia(tom)
+
+    assert.equals(100, casa.suciedad())
+    assert.equals(60, tom.energia())
+  }
+
+  test "Tom solo saca a Jerry si es mas rapido" {
+    casa.reiniciar()
+    tom.setEnergia(100)
+    jerry.setPeso(0)
+    casa.meterQuilombero(jerry)
+
+    casa.dia(tom)
+
+    assert.equals(null, casa.quilombero())
+  }
+
+  test "Jerry ensucia y aumenta su peso durante la noche" {
+    casa.reiniciar()
+    casa.ponerCuidador(robocat)
+    jerry.setPeso(0)
+    casa.meterQuilombero(jerry)
+
+    casa.noche()
+
+    assert.equals(110, casa.suciedad())
+    assert.equals(1, jerry.peso())
+  }
+
+  test "Tuffy interrumpe el sueno de Tom" {
+    casa.reiniciar()
+    casa.ponerCuidador(tom)
+    tom.setEnergia(100)
+    casa.meterQuilombero(tuffy)
+
+    casa.noche()
+
+    assert.equals(130, tom.energia())
+  }
+
+  test "Robocat deja limpia la casa y siempre atrapa" {
+    casa.reiniciar()
+    casa.agregarSuciedad(500)
+    casa.meterQuilombero(jerry)
+
+    casa.dia(robocat)
+
+    assert.equals(0, casa.suciedad())
+    assert.equals(null, casa.quilombero())
+  }
+
+  test "una pandilla hace quilombo con todos sus miembros" {
+    casa.reiniciar()
+    casa.ponerCuidador(robocat)
+    jerry.setPeso(0)
+    casa.meterQuilombero(pandilla.crear([jerry, jerry]))
+
+    casa.noche()
+
+    assert.equals(220, casa.suciedad())
   }
 
 }
